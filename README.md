@@ -40,6 +40,7 @@ The list is endless.
 
 ## API:
 `https://cryptoproof.info/api/search`
+`python api_tool.py search <compressed_bitcoin_address>`
 ```
 status : bool # true
 message : dict
@@ -50,16 +51,19 @@ message : dict
 ```
 -
 `https://cryptoproof.info/api/url`
+`python api_tool.py url <https://example_url.com>`
 ```
 status : bool # true
 ```
 -
 `https://cryptoproof.info/api/verify`
+`python api_tool.py verify`
 ```
 status : bool # true
 ```
 -
 `https://cryptoproof.info/api/account`
+`python api_tool.py account`
 ```
 status : bool # true
 message : dict
@@ -73,34 +77,39 @@ message : dict
 ```
 -
 `https://cryptoproof.info/api/login_history`
+`python api_tool.py login_history`
 ```
 status : bool # true
 message : list
 ```
 -
 `https://cryptoproof.info/api/subkey_activity`
+`python api_tool.py subkey_activity`
 ```
 status : bool # true
 message : list
 ```
 -
 `https://cryptoproof.info/api/transaction_history`
+`python api_tool.py transaction_history`
 ```
 status : bool # true
 message : list
 ```
 -
 `https://cryptoproof.info/api/index`
+`python api_tool.py index <new_index_level>`
 ```
 status : bool # true
 ```
 -
 `https://cryptoproof.info/api/withdraw`
+`python api_tool.py withdraw <bitcoin_address>`
 ```
 status : bool # true
 ```
 -
-error
+`error`
 ```
 status : bool # false
 message : str
