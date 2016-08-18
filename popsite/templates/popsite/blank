@@ -1,0 +1,3 @@
+{% extends "popsite/base.html" %}
+{% block content %}
+{% endblock %}

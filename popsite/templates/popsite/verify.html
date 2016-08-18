@@ -1,0 +1,40 @@
+{% extends "popsite/base.html" %}
+{% block content %}
+{% include "popsite/navbar_base.html" %}
+<div class="row">
+    <div class="col-md-6">
+        <form method='POST' action=''> {% csrf_token %}
+            {{ verification_form.as_p }}
+            <br />
+            <button type="submit" class="btn btn-success btn-sm">Submit</button>
+        </form>
+        <br />
+        <br />
+        <p>You can verify your account by decoding the string below using the private certificate from the https url you provided.<br />
+        <textarea>{{ encrypted_str }}</textarea></p>
+        <br />
+        <form action='' method="post"> {% csrf_token %}
+            <button class='btn btn-primary btn-xs' name="back_button" value="True">Back to Dashboard</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <p><b>An easy to use docker decoder container is available <a href="https://hub.docker.com/r/derrend/cryptoproofdecoder/" target="_blank">here</a>.</b></p>
+        <br />
+
+        <p><b><kbd>Python 2.7 sample decode script:</kbd></b></p>
+
+        <p><code>
+        from M2Crypto import RSA, X509<br />
+        from binascii import unhexlify<br />
+        <br />
+        path_to_crt = '<var>/path/to/private/key.pem</var>'<br />
+        encoded_str = '<var>string to decode</var>'<br />
+        <br />
+        private_crt = RSA.load_key(path_to_crt)<br />
+        decoded_str = private_crt.private_decrypt(unhexlify(encoded_str), RSA.pkcs1_padding)<br />
+        <br />
+        print decoded_str
+        </code></p>
+    </div>
+</div>
+{% endblock %}

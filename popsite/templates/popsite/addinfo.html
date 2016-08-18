@@ -1,0 +1,42 @@
+{% extends "popsite/base.html" %}
+{% block content %}
+{% include "popsite/navbar_base.html" %}
+{% load qr_tags %}
+<div class="row">
+    <div class="col-md-3">
+        <a href="bitcoin:{{ compressed_address }}">{% qr_from_text compressed_address %}</a>
+    </div>
+    <div class="col-md-9">
+        {% if hits == 1 %}
+        <p><h4><strong>You are the first person ever to view this record!</strong></h4></p>
+        {% endif %}
+
+        <p><strong>Bitcoin Address:</strong><br />
+        <a href="https://blockchain.info/address/{{ compressed_address }}" target="_blank">{{ compressed_address }}</a></p>
+
+        <p><strong>Associated URL:</strong><br />
+        {% if associated_url  == "Anonymous" %}
+            <font color="red">{{ associated_url }}</font></p>
+        {% else %}
+            <a href="{{ associated_url }}" target="_blank">{{ associated_url }}</a></p>
+        {% endif %}
+
+        <p><strong>Sumbission Number:</strong><br />
+        {{ hits }}</p>
+
+        <p><strong>Account Status:</strong><br />
+        {% if verified_status == True %}
+        <font color="green"><b>VERIFIED</b></font></p>
+        {% else %}
+        <font color="red"><b>NOT VERIFIED</b></font></p>
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form action="/">
+            <input class='btn btn-primary btn-sm' type="submit" value="Back">
+        </form>
+    </div>
+</div>
+{% endblock %}

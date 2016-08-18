@@ -1,0 +1,96 @@
+{% extends "popsite/base.html" %}
+{% block content %}
+{% include "popsite/navbar_base.html" %}
+{% load render_table from django_tables2 %}
+{% load qr_tags %}
+{% if error_msg %}
+    <p><font color="red">{{ error_msg }}</font></p>
+{% endif %}
+<div class="row">
+    <div class="col-md-3">
+        <a href="bitcoin:{{ deposit_address }}">{% qr_from_text deposit_address %}</a>
+    </div>
+    <div class="col-md-3">
+        <p><strong>*$ = USD</strong></p>
+        <p><strong>BTC Payment Address:</strong><br />
+            <a href="https://blockchain.info/address/{{ deposit_address }}" target="_blank"><small>{{ deposit_address }}</small></a></p>
+        <p><strong>BTC Balance:</strong><br />
+            {{ balance }}</p>
+        <p><strong>BTC Price:</strong><br />
+            ${{ price }}</p>
+    </div>
+    <div class="col-md-3">
+        <p><strong>*Price Per Key: $0.01</strong></p>
+        <p><strong>Credit:</strong><br />
+            ${{ credit }}</p>
+        <p><strong>Available Keys:</strong><br />
+        {% if remaining_key_allowance %}
+            {{ affordable_keys }} ({{ remaining_key_allowance }} free)</p>
+        {% else %}
+            {{ affordable_keys }}</p>
+        {% endif %}
+        {% if refund_form %}
+            <form method='POST' action=''> {% csrf_token %}
+                {{ refund_form.as_p }}
+                <button type="submit" class="btn btn-default btn-xs">Withdraw</button>
+            </form>
+        {% else %}
+            <p><strong>BTC Withdrawal</strong><br />
+            Balance must be > {{ minimum_deposit }} BTC<br />
+            to enable withdrawal.</p>
+        {% endif %}
+    </div>
+    <div class="col-md-3">
+        <p><strong>Account Status:</strong><br />
+        {% if verified_status %}
+            <font color="green"><b>VERIFIED</b></font></p>
+        {% else %}
+            <font color="red"><b>NOT VERIFIED</b></font>
+            {% if encrypted_str %}
+                </p>
+                <form action="" method="post"> {% csrf_token %}
+                    <button class='btn btn-danger btn-xs' name="verify" value="True">Verify Account</button>
+                </form>
+                <br />
+            {% else %}
+                <br />Supply a valid 'https://' address<br />
+                to enable verification.</p>
+            {% endif %}
+        {% endif %}
+        <form method='POST' action=''> {% csrf_token %}
+            {{ account_form.as_p }}
+            <button type="submit" class="btn btn-success btn-sm">Submit</button>
+            <!--<button class='btn btn-primary btn-sm' name="to_settings" value=True>Settings</button>-->
+        </form>
+    </div>
+</div>
+{% if login_table %}
+<div class="row">
+    <div class="col-md-4">
+        <p><strong>Login History:</strong></p>
+        {% render_table login_table %}
+        <form action="../login_history/" method="post"> {% csrf_token %}
+            <button class='btn btn-primary btn-xs'>Download Login History</button>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <p><strong>Subkey Activity:</strong></p>
+        {% render_table subkey_table %}
+        {% if subkey_table_exists %}
+            <form action="../subkey_activity/" method="post"> {% csrf_token %}
+                <button class='btn btn-primary btn-xs' name="subkey_activity" value="True">Download Subkey Activity</button>
+            </form>
+        {% endif %}
+    </div>
+    <div class="col-md-4">
+        <p><strong>Transaction History:</strong></p>
+        {% render_table transaction_table %}
+        {% if transaction_table_exists %}
+            <form action="../transaction_history/" method="post"> {% csrf_token %}
+                <button class='btn btn-primary btn-xs' name="transaction_history" value="True">Download Transaction History</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

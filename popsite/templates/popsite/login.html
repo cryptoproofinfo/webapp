@@ -1,0 +1,57 @@
+{% extends "popsite/base.html" %}
+{% load static %}
+{% block content %}
+{% include "popsite/navbar_base.html" %}
+{% if error_msg %}
+    <p><font color="red">{{ error_msg }}</font></p>
+{% endif %}
+<div class="row">
+    <div class="col-md-12">
+        <form id='formone' method='POST' action=''> {% csrf_token %}
+            {{ form.as_p }}
+            <br />
+            <button type="submit" class="btn btn-success btn-sm">Submit</button>
+        </form>
+        <br />
+
+        <form action="" method="post"> {% csrf_token %}
+            <button class='btn btn-primary btn-xs' name="to_search" value=True>Back to Search</button>
+        </form>
+
+        <br />
+        <p>Enter up to three valid BIP32 complient Bitcoin public keys seperated by spaces and designate the number of required signatories to create an account or resubmit an already registered key(s) to edit the account associated.</p>
+        <p>If only one key is submitted then the signatories field can be ignored.</p>
+        <p>The order in which the keys are submitted and the number of signatories are important.</p>
+
+        <p>Maximum tree depth is '255'<br />
+        Maximum child index is '2146483647'</p>
+
+        <p>A docker container for easy and secure local BIP32 key generation is available <a href="https://hub.docker.com/r/derrend/cryptoproofpycoin/" target="_blank">here</a>.<br />
+        BIP32 extended keys, subkeys and addresses can also be generated at <a href="http://bip32.org/">bip32.org</a></p>
+
+    </div>
+</div>
+{% if camera %}
+<script src="{% static "html5-qrcode.min.js" %}" type="application/javascript"></script>
+<script src="{% static "jsqrcode-combined.min.js" %}" type="application/javascript"></script>
+<script type="application/javascript">
+    $(document).ready(function(){
+        $('#reader').html5_qrcode(function(data){
+                {% if logreg %}
+                $('#id_search').val(data.slice(0,335));
+                {% else %}
+                $('#id_search').val(data.slice(0,35));
+                {% endif %}
+                $('#reader').html5_qrcode_stop()
+                $('#formone').submit();
+            },
+            function(error){
+                $('#read_error').html(error);
+            }, function(videoError){
+                $('#vid_error').html(videoError);
+            }
+        );
+    });
+</script>
+{% endif %}
+{% endblock %}

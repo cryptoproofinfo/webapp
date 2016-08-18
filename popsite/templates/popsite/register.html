@@ -1,0 +1,62 @@
+{% extends "popsite/base.html" %}
+{% block content %}
+{% include "popsite/navbar_base.html" %}
+{% load render_table from django_tables2 %}
+{% load qr_tags %}
+{% if error_msg %}
+    <p><font color="red">{{ error_msg }}</font></p><br />
+{% endif %}
+<div class="row">
+    <div class="col-md-3">
+        <!--<a href="https://blockchain.info/address/{{ deposit_address }}" target="_blank"><img src="return_qr?text={{ deposit_address }}" alt="{{ deposit_address }}" height="200" width="200"></a>
+        -->
+        <a href="bitcoin:{{ deposit_address }}">{% qr_from_text deposit_address %}</a>
+    </div>
+    <div class="col-md-3">
+        <p><strong>*$ = USD</strong></p>
+        <p><strong>BTC Payment Address:</strong><br />
+            <a href="https://blockchain.info/address/{{ deposit_address }}" target="_blank"><small>{{ deposit_address }}</small></a></p>
+        <p><strong>BTC Balance:</strong><br />
+            {{ balance }}</p>
+        <p><strong>BTC Price:</strong><br />
+            ${{ price }}</p>
+    </div>
+    <div class="col-md-3">
+        <p><strong>*Price Per Key: $0.01</strong></p>
+        <p><strong>Credit:</strong><br />
+            ${{ credit }}</p>
+        <p><strong>Available Keys:</strong><br />
+            {{ affordable_keys }}</p>
+    </div>
+    <div class="col-md-3">
+        <p><strong>Account Status:</strong><br />
+        {% if verified_status == True %}
+            <font color="green"><b>VERIFIED</b></font></p>
+        {% else %}
+            <font color="red"><b>NOT VERIFIED</b></font></p>
+        {% endif %}
+        <form method='POST' action=''> {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success btn-sm">Register</button>
+        </form>
+
+    </div>
+</div>
+<!-- if condition -->
+{% if login_table %}
+<div class="row">
+    <div class="col-md-4">
+        <p><strong>Login History:</strong></p>
+        {% render_table login_table %}
+    </div>
+    <div class="col-md-4">
+        <p><strong>Subkey Activity:</strong></p>
+        {% render_table subkey_table %}
+    </div>
+    <div class="col-md-4">
+        <p><strong>Transaction History:</strong></p>
+        {% render_table transaction_table %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
