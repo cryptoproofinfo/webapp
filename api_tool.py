@@ -66,7 +66,7 @@ else:
             exit()
 
         else:
-            path_crt = '/cert.key'
+            path_crt = 'cert.key'
             encoded_str = result['message']
 
             private_crt = RSA.load_key(path_crt)
