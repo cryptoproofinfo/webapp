@@ -66,7 +66,7 @@ else:
             exit()
 
         else:
-            path_crt = '/home/derrend/django_studio/cryptoproof/ssl/cryptoproof.key'
+            path_crt = '/cert.key'
             encoded_str = result['message']
 
             private_crt = RSA.load_key(path_crt)
