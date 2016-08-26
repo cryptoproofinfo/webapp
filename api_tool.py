@@ -1,3 +1,4 @@
+from os import environ
 from urllib import urlencode
 from sys import argv, exit
 from time import sleep
@@ -5,12 +6,25 @@ from urllib2 import Request, urlopen, URLError
 from M2Crypto import RSA
 from binascii import unhexlify
 import json
+#from pycoin.key.validate import is_public_bip32_valid
 
 # Variables
-xpubkeys = 'secret_xpubkey_string'
-sigs = '0'
+xpubkeys = environ.get('XPUBKEYS')
+sigs = environ.get('SIGS')
+if not xpubkeys or sigs:
+    xpubkeys = False
+    sigs = False
+
 mode = argv[1]
 info = argv[2] if len(argv) > 2 else False
+
+if not xpubkeys:
+    print 'invalid xpubkey value'
+    exit()
+
+if not sigs:
+    print 'invalid sigs value'
+    exit()
 
 def get_data(url, data):
     request = Request(url, data)
