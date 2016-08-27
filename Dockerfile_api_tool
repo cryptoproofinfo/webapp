@@ -6,7 +6,8 @@ ARG SIGS
 ENV XPUBKEYS ${XPUBKEYS}
 ENV SIGS ${SIGS}
 
-COPY api_tool.py /api_tool.py
+#COPY api_tool.py /api_tool.py
+COPY https://raw.githubusercontent.com/cryptoproofinfo/webapp/master/api_tool.py /api_tool.py
 COPY cert.key /cert.key
 
 RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
